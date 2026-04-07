@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest . --typescript --eslint --tailwind --app --src-dir --no-git --import-alias \"@/*\" --yes)"
+      "Bash(npx create-next-app@latest . --typescript --eslint --tailwind --app --src-dir --no-git --import-alias \"@/*\" --yes)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init --yes --base-color slate)",
+      "Bash(npx shadcn@latest init --yes)",
+      "Bash(npx shadcn@latest add sonner dropdown-menu avatar sheet skeleton scroll-area)",
+      "Bash(npx prisma:*)",
+      "Bash(mkdir -p \"C:/Users/zunig/Desktop/ecomerce/.claude\")",
+      "Bash(\"C:/Users/zunig/Desktop/ecomerce/.claude/launch.json\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(DATABASE_URL=\"postgresql://johndoe:randompassword@localhost:5432/mydb\" npx prisma generate)",
+      "Bash(npx shadcn@latest add badge card)",
+      "Bash(npx shadcn@latest add button input label select dialog table textarea separator tabs)"
     ]
   }
 }

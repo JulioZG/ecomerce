@@ -9,15 +9,19 @@ import { ProductCard } from "@/components/store/ProductCard"
 export const revalidate = 60
 
 async function getFeaturedProducts() {
-  return prisma.product.findMany({
-    where: { destacado: true, activo: true },
-    include: {
-      sport: { select: { nombre: true, slug: true } },
-      variants: { select: { talla: true, color: true, stock: true } },
-    },
-    take: 8,
-    orderBy: { createdAt: "desc" },
-  })
+  try {
+    return await prisma.product.findMany({
+      where: { destacado: true, activo: true },
+      include: {
+        sport: { select: { nombre: true, slug: true } },
+        variants: { select: { talla: true, color: true, stock: true } },
+      },
+      take: 8,
+      orderBy: { createdAt: "desc" },
+    })
+  } catch {
+    return []
+  }
 }
 
 export default async function HomePage() {

@@ -26,25 +26,32 @@ async function getProducts(params: SearchParams) {
     }),
   }
 
-  const [products, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: {
-        sport: { select: { nombre: true, slug: true } },
-        variants: { select: { talla: true, color: true, stock: true } },
-      },
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.product.count({ where }),
-  ])
-
-  return { products, total, pages: Math.ceil(total / limit) }
+  try {
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: {
+          sport: { select: { nombre: true, slug: true } },
+          variants: { select: { talla: true, color: true, stock: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.product.count({ where }),
+    ])
+    return { products, total, pages: Math.ceil(total / limit) }
+  } catch {
+    return { products: [], total: 0, pages: 0 }
+  }
 }
 
 async function getSports() {
-  return prisma.sport.findMany({ orderBy: { nombre: "asc" } })
+  try {
+    return await prisma.sport.findMany({ orderBy: { nombre: "asc" } })
+  } catch {
+    return []
+  }
 }
 
 export default async function CatalogoPage({

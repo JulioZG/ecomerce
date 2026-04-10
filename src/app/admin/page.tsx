@@ -6,12 +6,12 @@ import { ShoppingBag, Users, DollarSign, Palette } from "lucide-react"
 export default async function AdminDashboard() {
   const [totalOrders, paidOrders, pendingOrders, totalCustomOrders, totalUsers, revenueResult] =
     await Promise.all([
-      prisma.order.count(),
-      prisma.order.count({ where: { estado: "PAGADO" } }),
-      prisma.order.count({ where: { estado: "PENDIENTE" } }),
-      prisma.customUniformOrder.count(),
-      prisma.user.count(),
-      prisma.order.aggregate({ where: { estado: "PAGADO" }, _sum: { total: true } }),
+      prisma.order.count().catch(() => 0),
+      prisma.order.count({ where: { estado: "PAGADO" } }).catch(() => 0),
+      prisma.order.count({ where: { estado: "PENDIENTE" } }).catch(() => 0),
+      prisma.customUniformOrder.count().catch(() => 0),
+      prisma.user.count().catch(() => 0),
+      prisma.order.aggregate({ where: { estado: "PAGADO" }, _sum: { total: true } }).catch(() => ({ _sum: { total: 0 } })),
     ])
 
   const stats = [

@@ -19,13 +19,13 @@ export default async function AdminPedidosPage() {
     },
     orderBy: { createdAt: "desc" },
     take: 50,
-  })
+  }).catch(() => [])
 
   const customOrders = await prisma.customUniformOrder.findMany({
     include: { user: { select: { name: true, email: true } } },
     orderBy: { createdAt: "desc" },
     take: 20,
-  })
+  }).catch(() => [])
 
   return (
     <div>

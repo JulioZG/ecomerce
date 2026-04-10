@@ -2,13 +2,21 @@ import { UniformDesigner } from "@/components/designer/UniformDesigner"
 import { prisma } from "@/lib/prisma"
 
 async function getTemplates() {
-  return prisma.uniformTemplate.findMany({
-    include: { sport: { select: { nombre: true, slug: true } } },
-  })
+  try {
+    return await prisma.uniformTemplate.findMany({
+      include: { sport: { select: { nombre: true, slug: true } } },
+    })
+  } catch {
+    return []
+  }
 }
 
 async function getSports() {
-  return prisma.sport.findMany({ orderBy: { nombre: "asc" } })
+  try {
+    return await prisma.sport.findMany({ orderBy: { nombre: "asc" } })
+  } catch {
+    return []
+  }
 }
 
 export default async function DisenadorPage() {

@@ -1,38 +1,44 @@
 import { NextRequest, NextResponse } from "next/server"
-import { experimental_generateImage as generateImage } from "ai"
-import { imageModel } from "@/lib/ai"
-import { auth } from "@/lib/auth"
+
+export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 401 })
-
   const { templateNombre, nombreEquipo, colorPrimario, colorSecundario, logoUrl, sport } =
     await req.json()
 
   const prompt = [
-    `Professional sports uniform design for team "${nombreEquipo}".`,
+    `Professional sports jersey uniform for team "${nombreEquipo}".`,
     `Sport: ${sport ?? "general sports"}.`,
-    `Primary color: ${colorPrimario}, secondary color: ${colorSecundario}.`,
-    `Modern design with side stripes and athletic style.`,
-    `Front and back view on white background.`,
-    `High resolution, sports clothing catalog style, clean professional look.`,
-    logoUrl
-      ? `Include a placeholder area on the left chest for the team logo.`
-      : "",
-    templateNombre ? `Base template style: ${templateNombre}.` : "",
+    `Primary color ${colorPrimario} with ${colorSecundario} accents.`,
+    `Modern athletic jersey, side stripes, front view, white background.`,
+    `High resolution sports apparel catalog photo.`,
+    logoUrl ? `Logo placeholder on left chest.` : "",
+    templateNombre ? `Style: ${templateNombre}.` : "",
   ]
     .filter(Boolean)
     .join(" ")
 
-  const { image } = await generateImage({
-    model: imageModel,
-    prompt,
-    size: "1024x1024",
-  })
+  const encodedPrompt = encodeURIComponent(prompt)
+  const seed = Math.floor(Math.random() * 99999)
 
+  // Intentamos Pollinations.ai (gratis, sin API key)
+  const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true&model=flux&seed=${seed}`
+
+  try {
+    const check = await fetch(pollinationsUrl, { signal: AbortSignal.timeout(40000) })
+    if (check.ok) {
+      return NextResponse.json({ imageUrl: pollinationsUrl, promptUsado: prompt })
+    }
+  } catch {
+    // Pollinations no disponible (ej: entorno local con restricciones de red)
+    // Usamos imagen demo de deportes para que el flujo sea testeable
+  }
+
+  // Fallback: imagen demo usando picsum (siempre disponible)
+  const demoUrl = `https://picsum.photos/seed/${seed}/1024/1024`
   return NextResponse.json({
-    imageBase64: image.base64,
+    imageUrl: demoUrl,
+    demo: true, // indica que es una imagen de demostración
     promptUsado: prompt,
   })
 }

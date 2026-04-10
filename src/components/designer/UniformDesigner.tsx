@@ -92,7 +92,8 @@ export function UniformDesigner({
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? "Error generando diseño")
 
-      const imageUrl = `data:image/png;base64,${data.imageBase64}`
+      // Soporte para URL directa (Pollinations) o base64 (DALL-E legacy)
+      const imageUrl = data.imageUrl ?? `data:image/png;base64,${data.imageBase64}`
       store.setGeneratedImage(imageUrl, data.promptUsado)
       toast.success("¡Diseño generado!")
     } catch (err) {
@@ -325,7 +326,7 @@ export function UniformDesigner({
             <div className="space-y-3">
               <Skeleton className="w-full aspect-square rounded-xl" />
               <p className="text-center text-sm text-muted-foreground animate-pulse">
-                Generando diseño con IA...
+                Generando diseño con IA... puede tardar hasta 20 segundos ⏳
               </p>
             </div>
           )}

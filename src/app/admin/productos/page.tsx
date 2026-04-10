@@ -13,7 +13,7 @@ export default async function AdminProductosPage() {
       variants: { select: { stock: true } },
     },
     orderBy: { createdAt: "desc" },
-  })
+  }).catch(() => [])
 
   return (
     <div>

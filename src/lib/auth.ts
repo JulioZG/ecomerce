@@ -7,10 +7,12 @@ import { authConfig } from "./auth.config"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  adapter: PrismaAdapter(prisma) as any,
   providers: [
     // Spread providers from config but override Credentials with full authorize
-    ...authConfig.providers.filter((p) => p.id !== "credentials"),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...authConfig.providers.filter((p: any) => p.id !== "credentials"),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },

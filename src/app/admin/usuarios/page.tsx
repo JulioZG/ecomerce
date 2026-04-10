@@ -14,7 +14,7 @@ export default async function AdminUsuariosPage() {
       createdAt: true,
       _count: { select: { orders: true } },
     },
-  })
+  }).catch(() => [])
 
   return (
     <div>

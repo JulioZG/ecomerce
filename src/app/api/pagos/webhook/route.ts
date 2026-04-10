@@ -49,10 +49,10 @@ export async function POST(req: NextRequest) {
         await sendOrderConfirmationEmail({
           id: order.id,
           user: order.user,
-          total: order.total,
+          total: Number(order.total),
           items: order.items.map((item) => ({
             cantidad: item.cantidad,
-            precio: item.precio,
+            precio: Number(item.precio),
             product: item.product,
             variant: item.variant,
           })),

@@ -12,7 +12,27 @@
       "mcp__Claude_Preview__preview_start",
       "Bash(DATABASE_URL=\"postgresql://johndoe:randompassword@localhost:5432/mydb\" npx prisma generate)",
       "Bash(npx shadcn@latest add badge card)",
-      "Bash(npx shadcn@latest add button input label select dialog table textarea separator tabs)"
+      "Bash(npx shadcn@latest add button input label select dialog table textarea separator tabs)",
+      "Bash(node -e \"console.log\\(require\\(''crypto''\\).randomBytes\\(32\\).toString\\(''base64''\\)\\)\")",
+      "Bash(gh repo:*)",
+      "Bash(git add:*)",
+      "Bash(powershell.exe -Command \"Get-Command psql -ErrorAction SilentlyContinue; Get-ItemProperty 'HKLM:\\\\SOFTWARE\\\\PostgreSQL\\\\Installations\\\\*' -ErrorAction SilentlyContinue | Select-Object -First 1\")",
+      "mcp__54b07f36-cd9f-4f6b-81da-2e7e6d79939c__apply_migration",
+      "mcp__54b07f36-cd9f-4f6b-81da-2e7e6d79939c__get_project",
+      "Bash(npx shadcn@latest add alert-dialog --yes)",
+      "Bash(npx next:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(curl -s http://localhost:3000/api/productos)",
+      "Bash(taskkill /PID 2724 /F)",
+      "Bash(npm run:*)",
+      "Bash(powershell.exe -Command \"Stop-Process -Id 2724 -Force\")",
+      "Bash(powershell.exe -Command \"Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force\")",
+      "Bash(curl -s \"http://localhost:3000/api/productos\")",
+      "mcp__54b07f36-cd9f-4f6b-81da-2e7e6d79939c__execute_sql",
+      "Bash(node -e ':*)",
+      "Bash(curl -s http://localhost:3000/api/auth/providers)",
+      "Bash(git push:*)",
+      "Bash(curl -s -o /tmp/test-image.jpg -w '%{http_code} %{size_download} bytes' 'https://image.pollinations.ai/prompt/professional%20football%20jersey%20blue%20white?width=512&height=512&nologo=true&model=flux' --max-time 30)"
     ]
   }
 }

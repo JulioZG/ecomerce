@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
+import { useEffect, useState } from "react"
 import { ShoppingCart, Menu, User, LogOut, Settings, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,6 +25,8 @@ export function Navbar() {
   const { data: session } = useSession()
   const count = useCartStore((s) => s.count())
   const isAdmin = (session?.user as { role?: string })?.role === "ADMIN"
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
@@ -58,7 +61,7 @@ export function Navbar() {
           <Link href="/carrito">
             <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-slate-100">
               <ShoppingCart className="h-5 w-5 text-slate-600" />
-              {count > 0 && (
+              {mounted && count > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center">
                   {count > 9 ? "9+" : count}
                 </span>

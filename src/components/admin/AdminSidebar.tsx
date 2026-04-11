@@ -16,17 +16,17 @@ export function AdminSidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-60 bg-zinc-900 border-r border-zinc-800 shrink-0 flex flex-col">
+    <aside className="w-60 bg-white border-r border-slate-200 shrink-0 flex flex-col">
       {/* Logo */}
-      <div className="px-5 py-6 border-b border-zinc-800">
+      <div className="px-5 py-5 border-b border-slate-100">
         <Link href="/admin" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-amber-400 rounded-md flex items-center justify-center">
-            <Zap className="w-4 h-4 text-zinc-950 fill-zinc-950" />
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-sm">
+            <Zap className="w-4 h-4 text-white fill-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-zinc-100 leading-none">DeportesStore</p>
-            <p className="text-[10px] font-mono text-amber-400 tracking-widest uppercase mt-0.5">
-              Admin Panel
+            <p className="text-sm font-bold text-slate-900 leading-tight">DeportesStore</p>
+            <p className="text-[10px] text-orange-500 font-semibold tracking-wide uppercase leading-none mt-0.5">
+              Admin
             </p>
           </div>
         </Link>
@@ -34,29 +34,26 @@ export function AdminSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        <p className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest px-3 mb-3">
-          Navegación
-        </p>
         {links.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || (href !== "/admin" && pathname.startsWith(href))
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 group ${
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 active
-                  ? "bg-amber-400/10 text-amber-400 border border-amber-400/20"
-                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 border border-transparent"
+                  ? "bg-blue-50 text-blue-700"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
               <Icon
-                className={`h-4 w-4 shrink-0 transition-colors ${
-                  active ? "text-amber-400" : "text-zinc-500 group-hover:text-zinc-300"
+                className={`h-4 w-4 shrink-0 ${
+                  active ? "text-blue-600" : "text-slate-400"
                 }`}
               />
-              <span className="font-medium">{label}</span>
+              {label}
               {active && (
-                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-amber-400" />
+                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
               )}
             </Link>
           )
@@ -64,13 +61,13 @@ export function AdminSidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-3 py-4 border-t border-zinc-800">
+      <div className="px-3 py-4 border-t border-slate-100">
         <Link
           href="/"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300 transition-all duration-150 group border border-transparent"
+          className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
         >
-          <Home className="h-4 w-4 group-hover:text-zinc-300 transition-colors" />
-          <span>Ver tienda</span>
+          <Home className="h-4 w-4 text-slate-400" />
+          Ver tienda
         </Link>
       </div>
     </aside>

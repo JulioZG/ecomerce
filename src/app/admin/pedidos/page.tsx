@@ -1,15 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { Badge } from "@/components/ui/badge"
 import { formatPrice } from "@/lib/utils"
-
-const estadoColors: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-  PENDIENTE: "secondary",
-  PAGADO: "default",
-  EN_PREPARACION: "default",
-  ENVIADO: "outline",
-  ENTREGADO: "outline",
-  CANCELADO: "destructive",
-}
+import { OrderStatusSelect } from "@/components/admin/OrderStatusSelect"
 
 export default async function AdminPedidosPage() {
   const orders = await prisma.order.findMany({
@@ -62,9 +54,10 @@ export default async function AdminPedidosPage() {
                 </td>
                 <td className="p-3 font-semibold">{formatPrice(order.total)}</td>
                 <td className="p-3">
-                  <Badge variant={estadoColors[order.estado]}>
-                    {order.estado}
-                  </Badge>
+                  <OrderStatusSelect
+                    orderId={order.id}
+                    currentEstado={order.estado}
+                  />
                 </td>
               </tr>
             ))}

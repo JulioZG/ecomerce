@@ -62,7 +62,7 @@ export default async function MisPedidosPage() {
         <div className="space-y-4 mb-8">
           <h2 className="font-semibold text-lg">Pedidos de productos</h2>
           {orders.map((order) => (
-            <div key={order.id} className="border rounded-lg p-4">
+            <Link key={order.id} href={`/mis-pedidos/${order.id}`} className="block border rounded-lg p-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="font-medium">
@@ -85,7 +85,7 @@ export default async function MisPedidosPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

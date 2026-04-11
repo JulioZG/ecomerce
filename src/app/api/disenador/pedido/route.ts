@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
     },
   })
 
-  // Notify local producer via AWS SES
-  await sendCustomOrderToProducer({
+  // Notify local producer via AWS SES (non-blocking — don't fail the order if email fails)
+  sendCustomOrderToProducer({
     id: customOrder.id,
     nombreEquipo: customOrder.nombreEquipo,
     colorPrimario: customOrder.colorPrimario,
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     cantidades: customOrder.cantidades as Record<string, number>,
     notasAdicionales: customOrder.notasAdicionales,
     user: customOrder.user,
-  })
+  }).catch((err) => console.error("Failed to send producer email:", err))
 
   return NextResponse.json(customOrder, { status: 201 })
 }

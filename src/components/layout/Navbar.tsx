@@ -72,17 +72,15 @@ export function Navbar() {
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-blue-300 focus-visible:ring-blue-400 transition-all duration-200"
-                >
-                  <Avatar className="h-9 w-9 shadow-sm">
-                    <AvatarImage src={session.user.image ?? ""} />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-bold text-sm">
+                <button className="flex items-center justify-center h-9 w-9 rounded-full border-2 border-slate-200 hover:border-blue-400 transition-colors overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+                  {session.user.image ? (
+                    <img src={session.user.image} alt={session.user.name ?? ""} className="h-full w-full object-cover" />
+                  ) : (
+                    <span className="text-xs font-bold text-slate-600 bg-slate-100 w-full h-full flex items-center justify-center">
                       {session.user.name?.[0]?.toUpperCase() ?? "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
+                    </span>
+                  )}
+                </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"

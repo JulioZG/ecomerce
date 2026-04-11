@@ -9,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -73,43 +72,76 @@ export function Navbar() {
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0 hover:ring-2 hover:ring-blue-200 transition-all">
-                  <Avatar className="h-9 w-9">
+                <Button
+                  variant="ghost"
+                  className="relative h-9 w-9 rounded-full p-0 ring-2 ring-transparent hover:ring-blue-300 focus-visible:ring-blue-400 transition-all duration-200"
+                >
+                  <Avatar className="h-9 w-9 shadow-sm">
                     <AvatarImage src={session.user.image ?? ""} />
-                    <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-sm">
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-700 text-white font-bold text-sm">
                       {session.user.name?.[0]?.toUpperCase() ?? "U"}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-52 rounded-xl shadow-lg border-slate-100">
-                <div className="px-3 py-2">
-                  <p className="text-sm font-semibold text-slate-900 truncate">{session.user.name}</p>
-                  <p className="text-xs text-slate-500 truncate">{session.user.email}</p>
+              <DropdownMenuContent
+                align="end"
+                sideOffset={8}
+                className="w-60 p-0 rounded-xl shadow-lg border border-slate-200 overflow-hidden bg-white"
+              >
+                {/* Header */}
+                <div className="px-4 py-3.5 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-9 w-9 shrink-0">
+                      <AvatarImage src={session.user.image ?? ""} />
+                      <AvatarFallback className="bg-blue-600 text-white font-bold text-sm">
+                        {session.user.name?.[0]?.toUpperCase() ?? "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-slate-900 truncate leading-tight">
+                        {session.user.name}
+                      </p>
+                      <p className="text-xs text-slate-400 truncate mt-0.5">
+                        {session.user.email}
+                      </p>
+                    </div>
+                    {isAdmin && (
+                      <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 uppercase tracking-wide">
+                        Admin
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="rounded-lg">
-                  <Link href="/mis-pedidos" className="cursor-pointer">
-                    <User className="mr-2 h-4 w-4" />
-                    Mis pedidos
-                  </Link>
-                </DropdownMenuItem>
-                {isAdmin && (
-                  <DropdownMenuItem asChild className="rounded-lg">
-                    <Link href="/admin" className="cursor-pointer">
-                      <Settings className="mr-2 h-4 w-4" />
-                      Administración
+
+                {/* Items */}
+                <div className="p-1.5">
+                  <DropdownMenuItem asChild className="rounded-lg px-3 py-2 cursor-pointer hover:bg-slate-50 focus:bg-slate-50">
+                    <Link href="/mis-pedidos" className="flex items-center gap-2.5">
+                      <User className="h-4 w-4 text-slate-400 shrink-0" />
+                      <span className="text-sm text-slate-700">Mis pedidos</span>
                     </Link>
                   </DropdownMenuItem>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="rounded-lg text-red-500 focus:text-red-600 focus:bg-red-50 cursor-pointer"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Cerrar sesión
-                </DropdownMenuItem>
+
+                  {isAdmin && (
+                    <DropdownMenuItem asChild className="rounded-lg px-3 py-2 cursor-pointer hover:bg-slate-50 focus:bg-slate-50">
+                      <Link href="/admin" className="flex items-center gap-2.5">
+                        <Settings className="h-4 w-4 text-slate-400 shrink-0" />
+                        <span className="text-sm text-slate-700">Administración</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+
+                  <div className="my-1 h-px bg-slate-100" />
+
+                  <DropdownMenuItem
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                    className="rounded-lg px-3 py-2 cursor-pointer hover:bg-red-50 focus:bg-red-50"
+                  >
+                    <LogOut className="h-4 w-4 text-red-400 shrink-0 mr-2.5" />
+                    <span className="text-sm text-red-500">Cerrar sesión</span>
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (

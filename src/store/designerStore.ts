@@ -33,6 +33,7 @@ interface DesignerStore {
   setNombreEquipo: (nombre: string) => void
   setColor: (tipo: "primario" | "secundario", hex: string) => void
   setLogoUrl: (url: string | null) => void
+  setLogoFile: (file: File | null) => void
   setCantidades: (cantidades: Record<string, number>) => void
   setNotas: (notas: string) => void
   setGenerating: (loading: boolean) => void
@@ -71,6 +72,7 @@ export const useDesignerStore = create<DesignerStore>()((set) => ({
       ? set({ colorPrimario: hex })
       : set({ colorSecundario: hex }),
   setLogoUrl: (url) => set({ logoUrl: url }),
+  setLogoFile: (file) => set({ logoFile: file }),
   setCantidades: (cantidades) => set({ cantidades }),
   setNotas: (notas) => set({ notasAdicionales: notas }),
   setGenerating: (loading) => set({ isGenerating: loading }),

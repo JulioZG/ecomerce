@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
+import { Upload, X, CheckCircle2 } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from "next/image"
 
@@ -48,6 +49,23 @@ export function UniformDesigner({
   const router = useRouter()
   const store = useDesignerStore()
   const [submitting, setSubmitting] = useState(false)
+  const [logoFileName, setLogoFileName] = useState("")
+
+  function handleLogoFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setLogoFileName(file.name)
+    store.setLogoFile(file)
+    const reader = new FileReader()
+    reader.onload = () => store.setLogoUrl(reader.result as string)
+    reader.readAsDataURL(file)
+  }
+
+  function handleRemoveLogo() {
+    store.setLogoUrl(null)
+    store.setLogoFile(null)
+    setLogoFileName("")
+  }
 
   const filteredTemplates = store.selectedSport
     ? templates.filter((t) => t.sportId === store.selectedSport)
@@ -231,6 +249,11 @@ export function UniformDesigner({
             <Button
               disabled={!store.selectedTemplate}
               onClick={() => store.setStep(2)}
+              className={
+                store.selectedTemplate
+                  ? "bg-black hover:bg-neutral-800 text-white shadow-lg shadow-black/30 scale-105 transition-all duration-200"
+                  : ""
+              }
             >
               Siguiente
             </Button>
@@ -291,16 +314,61 @@ export function UniformDesigner({
             </div>
           </div>
 
+          {/* Logo upload */}
           <div>
-            <Label>Logo del equipo (opcional)</Label>
-            <p className="text-xs text-muted-foreground mb-2">
-              URL de imagen del logo (JPG, PNG)
-            </p>
-            <Input
-              placeholder="https://..."
-              value={store.logoUrl ?? ""}
-              onChange={(e) => store.setLogoUrl(e.target.value || null)}
-            />
+            <Label className="text-sm font-semibold tracking-wide">
+              Logo del equipo{" "}
+              <span className="font-normal text-muted-foreground">(opcional)</span>
+            </Label>
+
+            {store.logoUrl ? (
+              <div className="mt-2 flex items-center gap-4 rounded-2xl border-2 border-zinc-200 bg-zinc-50 p-4">
+                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+                  <Image
+                    src={store.logoUrl}
+                    alt="Logo del equipo"
+                    fill
+                    className="object-contain p-1"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+                    <p className="text-xs font-medium text-emerald-600">Logo subido</p>
+                  </div>
+                  <p className="mt-0.5 text-sm text-zinc-700 truncate">{logoFileName}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRemoveLogo}
+                  className="flex-shrink-0 rounded-xl p-2 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <label
+                htmlFor="logoFile"
+                className="mt-2 flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-8 transition-all hover:border-zinc-400 hover:bg-zinc-100 group"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-200 transition-colors group-hover:bg-zinc-300">
+                  <Upload className="h-5 w-5 text-zinc-500" />
+                </div>
+                <div className="text-center">
+                  <p className="text-sm font-medium text-zinc-700">
+                    Subí el logo de tu equipo
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-400">PNG, JPG o SVG · Máx. 2 MB</p>
+                </div>
+                <input
+                  id="logoFile"
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={handleLogoFile}
+                />
+              </label>
+            )}
           </div>
 
           <div className="flex justify-between">
@@ -310,6 +378,11 @@ export function UniformDesigner({
             <Button
               disabled={!store.nombreEquipo.trim()}
               onClick={() => store.setStep(3)}
+              className={
+                store.nombreEquipo
+                  ? "bg-black hover:bg-neutral-800 text-white shadow-lg shadow-black/30 scale-105 transition-all duration-200"
+                  : ""
+              }
             >
               Generar diseño
             </Button>

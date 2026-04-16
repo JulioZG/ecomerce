@@ -32,7 +32,9 @@
       "Bash(node -e ':*)",
       "Bash(curl -s http://localhost:3000/api/auth/providers)",
       "Bash(git push:*)",
-      "Bash(curl -s -o /tmp/test-image.jpg -w '%{http_code} %{size_download} bytes' 'https://image.pollinations.ai/prompt/professional%20football%20jersey%20blue%20white?width=512&height=512&nologo=true&model=flux' --max-time 30)"
+      "Bash(curl -s -o /tmp/test-image.jpg -w '%{http_code} %{size_download} bytes' 'https://image.pollinations.ai/prompt/professional%20football%20jersey%20blue%20white?width=512&height=512&nologo=true&model=flux' --max-time 30)",
+      "Bash(xargs kill:*)",
+      "Bash(fuser -k 3000/tcp)"
     ]
   }
 }

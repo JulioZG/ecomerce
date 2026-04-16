@@ -14,27 +14,19 @@ interface ProductCardProps {
   }
 }
 
-const sportColors: Record<string, string> = {
-  futbol: "bg-emerald-100 text-emerald-700",
-  basquet: "bg-orange-100 text-orange-700",
-  running: "bg-blue-100 text-blue-700",
-  voley: "bg-violet-100 text-violet-700",
-}
-
 export function ProductCard({ product }: ProductCardProps) {
   const hasStock = product.variants.some((v) => v.stock > 0)
-  const sportColor = product.sport ? (sportColors[product.sport.slug] ?? "bg-slate-100 text-slate-600") : ""
 
   return (
     <Link href={`/producto/${product.slug}`} className="group block">
-      {/* Image container */}
-      <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-100 mb-3">
+      {/* Image */}
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#f5f5f5] mb-3">
         {product.images[0] ? (
           <Image
             src={product.images[0]}
             alt={product.nombre}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (
@@ -43,32 +35,40 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         )}
 
-        {/* Out of stock overlay */}
+        {/* Second image on hover */}
+        {product.images[1] && (
+          <Image
+            src={product.images[1]}
+            alt=""
+            fill
+            className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+            sizes="(max-width: 768px) 50vw, 25vw"
+          />
+        )}
+
+        {/* Out of stock */}
         {!hasStock && (
-          <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center">
-            <span className="bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-full">
-              Sin stock
+          <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+            <span className="bg-[#1a1a1a] text-white text-[11px] font-semibold uppercase tracking-[0.1em] px-4 py-1.5">
+              Agotado
             </span>
           </div>
         )}
 
-        {/* Quick add hint */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent py-3 px-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <p className="text-white text-xs font-semibold text-center">Ver producto</p>
-        </div>
-      </div>
-
-      {/* Info */}
-      <div className="space-y-1.5">
+        {/* Sport badge */}
         {product.sport && (
-          <span className={`inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${sportColor}`}>
+          <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-[10px] font-semibold uppercase tracking-[0.1em] text-[#1a1a1a] px-2.5 py-1">
             {product.sport.nombre}
           </span>
         )}
-        <h3 className="font-semibold text-sm text-slate-800 line-clamp-2 group-hover:text-blue-600 transition-colors leading-snug">
+      </div>
+
+      {/* Info */}
+      <div>
+        <h3 className="text-[13px] text-[#1a1a1a] line-clamp-1 group-hover:text-[#007AFF] transition-colors leading-snug">
           {product.nombre}
         </h3>
-        <p className="font-extrabold text-blue-600 text-base">
+        <p className="text-[14px] font-semibold text-[#1a1a1a] mt-1">
           {formatPrice(product.precio)}
         </p>
       </div>

@@ -50,7 +50,7 @@ function LoginForm() {
               <Zap className="h-6 w-6 text-white fill-white" />
             </div>
           </Link>
-          <h2 className="text-4xl font-extrabold mb-4">DeportesStore</h2>
+          <h2 className="text-4xl font-extrabold mb-4">ATLÉTICA</h2>
           <p className="text-blue-200 text-lg max-w-xs mx-auto">
             Ropa deportiva para todos los deportes y uniformes personalizados con IA
           </p>
@@ -66,13 +66,13 @@ function LoginForm() {
               <Zap className="h-4 w-4 text-white fill-white" />
             </div>
             <span className="font-extrabold text-lg">
-              Deportes<span className="text-blue-600">Store</span>
+              ATLÉTICA
             </span>
           </Link>
 
           <div className="mb-8">
             <h1 className="text-2xl font-extrabold text-slate-900">Bienvenido de vuelta</h1>
-            <p className="text-slate-500 mt-1 text-sm">Ingresá a tu cuenta para continuar</p>
+            <p className="text-slate-500 mt-1 text-sm">Inicia sesión en tu cuenta para continuar</p>
           </div>
 
           <Button
@@ -139,9 +139,9 @@ function LoginForm() {
           </form>
 
           <p className="text-center text-sm text-slate-500 mt-6">
-            ¿No tenés cuenta?{" "}
+            ¿No tienes cuenta?{" "}
             <Link href="/registrarse" className="text-blue-600 font-semibold hover:text-blue-700 hover:underline">
-              Registrate gratis
+              Regístrate gratis
             </Link>
           </p>
         </div>

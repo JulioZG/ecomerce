@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         title: `${item.product.nombre} - ${item.variant.talla} / ${item.variant.color}`,
         quantity: item.cantidad,
         unit_price: Number(item.precio),
-        currency_id: "ARS",
+        currency_id: "MXN",
       })),
       back_urls: {
         success: `${appUrl}/checkout/confirmacion?orderId=${orderId}`,

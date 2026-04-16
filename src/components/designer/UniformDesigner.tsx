@@ -60,11 +60,11 @@ export function UniformDesigner({
       return
     }
     if (!store.selectedTemplate) {
-      toast.error("Seleccioná una plantilla primero")
+      toast.error("Selecciona una plantilla primero")
       return
     }
     if (!store.nombreEquipo.trim()) {
-      toast.error("Ingresá el nombre del equipo")
+      toast.error("Ingresa el nombre del equipo")
       return
     }
     if (store.generationCount >= 3) {
@@ -110,7 +110,7 @@ export function UniformDesigner({
 
     const totalUnidades = Object.values(store.cantidades).reduce((a, b) => a + b, 0)
     if (totalUnidades === 0) {
-      toast.error("Ingresá al menos una cantidad")
+      toast.error("Ingresa al menos una cantidad")
       return
     }
 

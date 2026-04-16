@@ -49,7 +49,7 @@ export default async function AdminPlantillasPage() {
           <p className="font-medium">No hay plantillas todavía</p>
           <p className="text-sm mt-1">
             <Link href="/admin/plantillas/nueva" className="text-blue-600 hover:underline">
-              Creá la primera
+              Crea la primera
             </Link>
           </p>
         </div>

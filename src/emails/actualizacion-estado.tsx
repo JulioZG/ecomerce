@@ -55,7 +55,7 @@ export default function ActualizacionEstado({ order }: Props) {
             {estadoLabel}
           </Text>
           <Text style={{ color: "#666", fontSize: "12px" }}>
-            Si tenés alguna consulta, respondé a este email.
+            Si tienes alguna consulta, responde a este email.
           </Text>
         </Container>
       </Body>

@@ -50,9 +50,9 @@ export default function RegistrarsePage() {
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center">
           <Link href="/" className="text-2xl font-bold text-blue-600">
-            DeportesStore
+            ATLÉTICA
           </Link>
-          <h1 className="text-xl font-semibold mt-2">Creá tu cuenta</h1>
+          <h1 className="text-xl font-semibold mt-2">Crea tu cuenta</h1>
         </div>
 
         <Button
@@ -98,7 +98,7 @@ export default function RegistrarsePage() {
         </form>
 
         <p className="text-center text-sm text-muted-foreground">
-          ¿Ya tenés cuenta?{" "}
+          ¿Ya tienes cuenta?{" "}
           <Link href="/iniciar-sesion" className="text-blue-600 hover:underline">
             Ingresar
           </Link>

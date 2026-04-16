@@ -7,9 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatPrice(price: number | string | { toNumber: () => number }): string {
   const num = typeof price === "object" ? price.toNumber() : Number(price)
-  return new Intl.NumberFormat("es-AR", {
+  return new Intl.NumberFormat("es-MX", {
     style: "currency",
-    currency: "ARS",
+    currency: "MXN",
     minimumFractionDigits: 0,
   }).format(num)
 }

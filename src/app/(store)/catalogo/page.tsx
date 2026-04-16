@@ -1,72 +1,26 @@
-import { Suspense } from "react"
 import Link from "next/link"
-import { prisma } from "@/lib/prisma"
+import { getProducts, getSports, getCategories, type ProductSearchParams } from "@/services/products"
 import { ProductCard } from "@/components/store/ProductCard"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
-
-interface SearchParams {
-  deporte?: string
-  categoria?: string
-  talla?: string
-  page?: string
-}
-
-async function getProducts(params: SearchParams) {
-  const page = Number(params.page ?? "1")
-  const limit = 12
-
-  const where = {
-    activo: true,
-    ...(params.deporte && { sport: { slug: params.deporte } }),
-    ...(params.categoria && { category: { slug: params.categoria } }),
-    ...(params.talla && {
-      variants: { some: { talla: params.talla, stock: { gt: 0 } } },
-    }),
-  }
-
-  try {
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        where,
-        include: {
-          sport: { select: { nombre: true, slug: true } },
-          variants: { select: { talla: true, color: true, stock: true } },
-        },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.product.count({ where }),
-    ])
-    return { products, total, pages: Math.ceil(total / limit) }
-  } catch {
-    return { products: [], total: 0, pages: 0 }
-  }
-}
-
-async function getSports() {
-  try {
-    return await prisma.sport.findMany({ orderBy: { nombre: "asc" } })
-  } catch {
-    return []
-  }
-}
+import { Breadcrumb } from "@/components/shared/Breadcrumb"
+import { PageHeader } from "@/components/shared/PageHeader"
+import { EmptyState } from "@/components/shared/EmptyState"
+import { CatalogoFilters } from "@/components/store/CatalogoFilters"
+import { CatalogoToolbar } from "@/components/store/CatalogoToolbar"
 
 export default async function CatalogoPage({
   searchParams,
 }: {
-  searchParams: Promise<SearchParams>
+  searchParams: Promise<ProductSearchParams>
 }) {
   const params = await searchParams
-  const { products, total, pages } = await getProducts(params)
-  const sports = await getSports()
+  const [{ products, total, pages }, sports, categories] = await Promise.all([
+    getProducts(params),
+    getSports(),
+    getCategories(),
+  ])
   const page = Number(params.page ?? "1")
 
-  const tallas = ["XS", "S", "M", "L", "XL", "XXL"]
-
-  function buildUrl(updates: Partial<SearchParams>) {
+  function buildUrl(updates: Partial<ProductSearchParams>) {
     const merged = { ...params, ...updates }
     const qs = Object.entries(merged)
       .filter(([, v]) => v)
@@ -76,91 +30,69 @@ export default async function CatalogoPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Filters */}
-        <aside className="w-full md:w-56 shrink-0">
-          <h2 className="font-bold mb-4">Filtros</h2>
+    <div className="bg-white min-h-screen">
+      <Breadcrumb items={[{ label: "Inicio", href: "/" }, { label: "Catálogo" }]} />
+      <PageHeader
+        title="Catálogo"
+        subtitle="Encuentra la ropa deportiva ideal para tu entrenamiento"
+        size="lg"
+      />
+      <CatalogoToolbar total={total} sports={sports} params={params} buildUrl={buildUrl} />
 
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground uppercase">Deporte</h3>
-            <div className="flex flex-col gap-1">
-              <Link href="/catalogo">
-                <Badge
-                  variant={!params.deporte ? "default" : "outline"}
-                  className="cursor-pointer"
-                >
-                  Todos
-                </Badge>
-              </Link>
-              {sports.map((s) => (
-                <Link key={s.id} href={buildUrl({ deporte: s.slug, page: "1" })}>
-                  <Badge
-                    variant={params.deporte === s.slug ? "default" : "outline"}
-                    className="cursor-pointer"
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex gap-10">
+          <CatalogoFilters sports={sports} categories={categories} params={params} buildUrl={buildUrl} />
+
+          <div className="flex-1">
+            {products.length === 0 ? (
+              <EmptyState
+                emoji="🔍"
+                title="Sin resultados"
+                description="No encontramos productos con los filtros seleccionados."
+                action={{ label: "Ver todos los productos", href: "/catalogo" }}
+              />
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
+                {products.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
+              </div>
+            )}
+
+            {pages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-12 pt-8 border-t border-[#e5e5e5]">
+                {page > 1 && (
+                  <Link
+                    href={buildUrl({ page: String(page - 1) })}
+                    className="px-5 py-2.5 border border-[#e5e5e5] text-[12px] font-medium uppercase tracking-[0.08em] text-[#1a1a1a] hover:border-[#1a1a1a] transition-colors"
                   >
-                    {s.nombre}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold mb-2 text-muted-foreground uppercase">Talla</h3>
-            <div className="flex flex-wrap gap-2">
-              {tallas.map((t) => (
-                <Link key={t} href={buildUrl({ talla: params.talla === t ? undefined : t, page: "1" })}>
-                  <Badge
-                    variant={params.talla === t ? "default" : "outline"}
-                    className="cursor-pointer"
+                    Anterior
+                  </Link>
+                )}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+                    <Link
+                      key={p}
+                      href={buildUrl({ page: String(p) })}
+                      className={`w-10 h-10 flex items-center justify-center text-[13px] font-medium transition-colors ${
+                        p === page ? "bg-[#1a1a1a] text-white" : "text-[#666] hover:text-[#1a1a1a]"
+                      }`}
+                    >
+                      {p}
+                    </Link>
+                  ))}
+                </div>
+                {page < pages && (
+                  <Link
+                    href={buildUrl({ page: String(page + 1) })}
+                    className="px-5 py-2.5 border border-[#e5e5e5] text-[12px] font-medium uppercase tracking-[0.08em] text-[#1a1a1a] hover:border-[#1a1a1a] transition-colors"
                   >
-                    {t}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
+                    Siguiente
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
-        </aside>
-
-        {/* Products */}
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-muted-foreground">
-              {total} producto{total !== 1 ? "s" : ""}
-            </p>
-          </div>
-
-          {products.length === 0 ? (
-            <div className="text-center py-20 text-muted-foreground">
-              No se encontraron productos con los filtros aplicados.
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {products.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          )}
-
-          {/* Pagination */}
-          {pages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {page > 1 && (
-                <Button asChild variant="outline">
-                  <Link href={buildUrl({ page: String(page - 1) })}>Anterior</Link>
-                </Button>
-              )}
-              <span className="flex items-center px-4 text-sm">
-                {page} / {pages}
-              </span>
-              {page < pages && (
-                <Button asChild variant="outline">
-                  <Link href={buildUrl({ page: String(page + 1) })}>Siguiente</Link>
-                </Button>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>

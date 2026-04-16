@@ -141,7 +141,7 @@ export function PlantillaForm({ sports, template }: Props) {
         <Label>Deporte *</Label>
         <Select value={sportId} onValueChange={setSportId} required>
           <SelectTrigger>
-            <SelectValue placeholder="Seleccioná un deporte" />
+            <SelectValue placeholder="Selecciona un deporte" />
           </SelectTrigger>
           <SelectContent>
             {sports.map((s) => (

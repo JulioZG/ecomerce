@@ -24,7 +24,7 @@ export function AdminSidebar() {
             <Zap className="w-4 h-4 text-white fill-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-900 leading-tight">DeportesStore</p>
+            <p className="text-sm font-bold text-slate-900 leading-tight">ATLÉTICA</p>
             <p className="text-[10px] text-orange-500 font-semibold tracking-wide uppercase leading-none mt-0.5">
               Admin
             </p>

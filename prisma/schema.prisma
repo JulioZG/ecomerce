@@ -165,6 +165,14 @@ model Order {
   mpPaymentId    String?
   mpStatus       String?
   notas          String?     @db.Text
+  // Tracking
+  numeroGuia     String?
+  paqueteria     String?
+  // Estado timestamps
+  pagadoAt       DateTime?
+  preparandoAt   DateTime?
+  enviadoAt      DateTime?
+  entregadoAt    DateTime?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
